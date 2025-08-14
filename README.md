@@ -1,6 +1,6 @@
 # Conversor de Moedas
 
-Para utilizar, acesse:  ou clone o repositório seguindo as instruções do ponto n°4 deste README
+Para utilizar, acesse: https://cambiodemoedas.com ou clone o repositório seguindo as instruções do ponto n°4 deste README
 
 ## 🚀 Funcionalidades
 
