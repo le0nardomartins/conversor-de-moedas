@@ -683,7 +683,7 @@ button:active {
 /* Espaçador invisível para mobile */
 .mobile-spacer {
     display: none;
-    height: 300px;
+    height: 260px;
     width: 100%;
     flex-shrink: 0;
 }
