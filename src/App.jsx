@@ -31,10 +31,12 @@ export default function App() {
     const [theme, setTheme] = useState(() => {
         const saved = localStorage.getItem('theme')
         if (saved) return saved
-        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        return 'light'
     })
     const [locale, setLocale] = useState(() => (navigator.language || 'pt-BR'))
 	const amountInputRef = useRef(null)
+    const [copiedResult, setCopiedResult] = useState(false)
+    const [copiedRate, setCopiedRate] = useState(false)
 
 	// Formatação ao digitar: sempre trata como centavos
 	const handleAmountInput = (e) => {
@@ -197,15 +199,37 @@ export default function App() {
 		setTo(from)
 	}
 
-	async function copy(text) {
+	async function copy(text, target) {
 		try {
 			await navigator.clipboard.writeText(text)
+			if (target === 'result') {
+				setCopiedResult(true)
+				setTimeout(() => setCopiedResult(false), 1500)
+			} else if (target === 'rate') {
+				setCopiedRate(true)
+				setTimeout(() => setCopiedRate(false), 1500)
+			}
 		} catch {}
 	}
 
     return (
         <div className="container">
+            {/* Header mobile */}
+            <div className="mobile-header">
+                <div className="header-content">
+                    <h1>{locale.startsWith('pt') ? 'Conversor de Moedas' : 'Currency Converter'}</h1>
+                    <div className="theme-toggle" title={theme === 'dark' ? (locale.startsWith('pt') ? 'Tema escuro' : 'Dark theme') : (locale.startsWith('pt') ? 'Tema claro' : 'Light theme')}>
+                        <button type="button" className={`switch ${theme === 'dark' ? 'active' : ''}`} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={locale.startsWith('pt') ? 'Alternar tema' : 'Toggle theme'}>
+                            <span className="knob" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            {/* Título desktop */}
             <h1 className="page-title">{locale.startsWith('pt') ? 'Conversor de Moedas' : 'Currency Converter'}</h1>
+            
+            {/* Toggle tema desktop */}
             <div className="theme-toggle" title={theme === 'dark' ? (locale.startsWith('pt') ? 'Tema escuro' : 'Dark theme') : (locale.startsWith('pt') ? 'Tema claro' : 'Light theme')}>
                 <button type="button" className={`switch ${theme === 'dark' ? 'active' : ''}`} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={locale.startsWith('pt') ? 'Alternar tema' : 'Toggle theme'}>
                     <span className="knob" />
@@ -215,20 +239,22 @@ export default function App() {
                 <form onSubmit={handleSubmit}>
                 <div className="input-group formatted-input">
 					<label htmlFor="amount">Valor</label>
-					<input
-						ref={amountInputRef}
-						id="amount"
-						placeholder="0,00"
-						inputMode="numeric"
-            onInput={handleAmountInput}
-                        onKeyDown={handleAmountKeyDown}
-                        onPaste={handleAmountPaste}
-            onFocus={(e) => {
-                // posiciona o cursor sempre à esquerda
-                e.target.setSelectionRange(0, 0)
-            }}
-					/>
-                    <span className="currency-prefix">{getCurrencySymbol(from)}</span>
+					<div className="input-with-prefix">
+						<input
+							ref={amountInputRef}
+							id="amount"
+							placeholder="0,00"
+							inputMode="numeric"
+					onInput={handleAmountInput}
+							onKeyDown={handleAmountKeyDown}
+							onPaste={handleAmountPaste}
+					onFocus={(e) => {
+						// posiciona o cursor sempre à esquerda
+						e.target.setSelectionRange(0, 0)
+					}}
+						/>
+						<span className="currency-prefix">{getCurrencySymbol(from)}</span>
+					</div>
 				</div>
 
                 <div className="currency-selectors">
@@ -284,25 +310,27 @@ export default function App() {
                 <div className="result-box">
                     <h3>Valor Convertido</h3>
                     <div className="result-content">
-                        <p id="convertedResult">{result != null ? `${result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '--'}</p>
-                        <button className="copy-btn" onClick={() => copy(result != null ? `${result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '')} title="Copiar resultado">
+							<p id="convertedResult">{result != null ? `${result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '--'}</p>
+							<button type="button" className={`copy-btn ${copiedResult ? 'copied' : ''}`} onClick={() => copy(result != null ? `${result.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '', 'result')} title="Copiar resultado">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
 									<rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
 									<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
 								</svg>
 							</button>
+							{copiedResult && <span className="copy-message" role="status" aria-live="polite">Copiado!</span>}
 						</div>
 					</div>
 					<div className="result-box">
 						<h3>Taxa</h3>
 						<div className="result-content">
-                        <p id="conversionRate">{rate != null ? `${rate.toFixed(2)}` : '--'}</p>
-                        <button className="copy-btn" onClick={() => copy(rate != null ? `${rate.toFixed(2)}` : '')} title="Copiar taxa">
+							<p id="conversionRate">{rate != null ? `${rate.toFixed(2)}` : '--'}</p>
+							<button type="button" className={`copy-btn ${copiedRate ? 'copied' : ''}`} onClick={() => copy(rate != null ? `${rate.toFixed(2)}` : '', 'rate')} title="Copiar taxa">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
 									<rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
 									<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
 								</svg>
 							</button>
+							{copiedRate && <span className="copy-message" role="status" aria-live="polite">Copiado!</span>}
 						</div>
 					</div>
                 </div>

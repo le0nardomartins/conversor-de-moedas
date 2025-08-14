@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conversor de Moedas</title>
     <meta name="description" content="Conversor de moedas com taxas históricas">
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
     <style>
         /* Estilos críticos para evitar FOUC (Flash of Unstyled Content) */
         body {
@@ -13,6 +14,14 @@
             color: #333333;
         }
     </style>
+    <script>
+        // Garantir tema padrão claro antes do React montar
+        try {
+            var saved = localStorage.getItem('theme');
+            var theme = saved || 'light';
+            document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+    </script>
 </head>
 <body>
     <div id="root"></div>
