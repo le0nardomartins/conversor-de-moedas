@@ -1,0 +1,68 @@
+### Node / Vite
+node_modules/
+dist/
+build/
+.vite/
+.cache/
+.parcel-cache/
+.turbo/
+coverage/
+
+### Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+debug.log*
+
+### Env files
+.env
+.env.*
+.env.local
+.env.*.local
+!.env.example
+
+### Editors/IDEs
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.iml
+
+### TypeScript
+*.tsbuildinfo
+
+### OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+._*
+.Spotlight-V100
+.Trashes
+
+### Frameworks/Deploy
+.vercel/
+.next/
+.nuxt/
+.docusaurus/
+.firebase/
+functions/node_modules/
+
+### Tests / Cypress / Playwright
+cypress/videos/
+cypress/screenshots/
+test-results/
+playwright-report/
+blob-report/
+
+### Misc
+.eslintcache
+.stylelintcache
+.sass-cache/
+*.local
