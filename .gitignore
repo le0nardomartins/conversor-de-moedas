@@ -66,3 +66,4 @@ blob-report/
 .stylelintcache
 .sass-cache/
 *.local
+.vercel
