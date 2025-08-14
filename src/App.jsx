@@ -221,10 +221,15 @@ export default function App() {
                     <div className="theme-toggle" title={theme === 'dark' ? (locale.startsWith('pt') ? 'Tema escuro' : 'Dark theme') : (locale.startsWith('pt') ? 'Tema claro' : 'Light theme')}>
                         <button type="button" className={`switch ${theme === 'dark' ? 'active' : ''}`} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={locale.startsWith('pt') ? 'Alternar tema' : 'Toggle theme'}>
                             <span className="knob" />
+                            <span className="theme-icon sun">☀️</span>
+                            <span className="theme-icon moon">🌙</span>
                         </button>
                     </div>
                 </div>
             </div>
+            
+            {/* Espaçador invisível para mobile */}
+            <div className="mobile-spacer"></div>
             
             {/* Título desktop */}
             <h1 className="page-title">{locale.startsWith('pt') ? 'Conversor de Moedas' : 'Currency Converter'}</h1>
@@ -339,7 +344,7 @@ export default function App() {
 			<footer className="app-footer">
 				<small>
 					{locale.startsWith('pt') ? 'Cotações de ' : 'Rates by '}<a href="https://exchangerate.host" target="_blank" rel="noreferrer">exchangerate.host</a> {locale.startsWith('pt') ? 'e ' : 'and '}<a href="https://www.frankfurter.app" target="_blank" rel="noreferrer">frankfurter.app</a> · {new Date().getFullYear()}<br/>
-					{locale.startsWith('pt') ? 'Criado por hobby por ' : 'Built for fun by '}<a href="https://leonardomartins.dev" target="_blank" rel="noreferrer">leonardomartins.dev</a>. {locale.startsWith('pt') ? 'Espero que possa ajudar você 🙂' : 'Hope it helps you 🙂'}
+					{locale.startsWith('pt') ? 'Criado como hobby por ' : 'Built for fun by '}<a href="https://leonardomartins.dev" target="_blank" rel="noreferrer">leonardomartins.dev</a>. {locale.startsWith('pt') ? 'Espero que possa ajudar você 🙂' : 'Hope it helps you 🙂'}
 				</small>
 			</footer>
 		</div>
