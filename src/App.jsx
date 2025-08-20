@@ -37,6 +37,7 @@ export default function App() {
 	const amountInputRef = useRef(null)
     const [copiedResult, setCopiedResult] = useState(false)
     const [copiedRate, setCopiedRate] = useState(false)
+    const [swapRotation, setSwapRotation] = useState(0)
 
 	// Formatação ao digitar: sempre trata como centavos
 	const handleAmountInput = (e) => {
@@ -197,6 +198,7 @@ export default function App() {
 	function swap() {
 		setFrom(to)
 		setTo(from)
+		setSwapRotation(prev => prev + 180)
 	}
 
 	async function copy(text, target) {
@@ -231,15 +233,17 @@ export default function App() {
             {/* Espaçador invisível para mobile */}
             <div className="mobile-spacer"></div>
             
-            {/* Título desktop */}
-            <h1 className="page-title">{locale.startsWith('pt') ? 'Conversor de Moedas' : 'Currency Converter'}</h1>
-            
-            {/* Toggle tema desktop */}
-            <div className="theme-toggle" title={theme === 'dark' ? (locale.startsWith('pt') ? 'Tema escuro' : 'Dark theme') : (locale.startsWith('pt') ? 'Tema claro' : 'Light theme')}>
-                <button type="button" className={`switch ${theme === 'dark' ? 'active' : ''}`} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={locale.startsWith('pt') ? 'Alternar tema' : 'Toggle theme'}>
-                    <span className="knob" />
-                </button>
-            </div>
+                         {/* Header desktop */}
+             <div className="desktop-header">
+                 <h1 className="page-title">{locale.startsWith('pt') ? 'Conversor de Moedas' : 'Currency Converter'}</h1>
+                 <div className="theme-toggle" title={theme === 'dark' ? (locale.startsWith('pt') ? 'Tema escuro' : 'Dark theme') : (locale.startsWith('pt') ? 'Tema claro' : 'Light theme')}>
+                     <button type="button" className={`switch ${theme === 'dark' ? 'active' : ''}`} onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} aria-label={locale.startsWith('pt') ? 'Alternar tema' : 'Toggle theme'}>
+                         <span className="knob" />
+                         <span className="theme-icon sun">☀️</span>
+                         <span className="theme-icon moon">🌙</span>
+                     </button>
+                 </div>
+             </div>
             <div className="converter-card">
                 <form onSubmit={handleSubmit}>
                 <div className="input-group formatted-input">
@@ -274,7 +278,7 @@ export default function App() {
                         </div>
                     </div>
 
-                    <div className="swap-icon" onClick={swap}>
+                    <div className="swap-icon" onClick={swap} style={{ transform: `rotate(${swapRotation}deg)` }}>
                         <span>⇄</span>
                     </div>
 
@@ -306,6 +310,12 @@ export default function App() {
                 <button id="convertBtn" type="submit" disabled={loading}>
 					{loading ? 'Convertendo...' : 'Converter'}
 				</button>
+                
+                <div className="api-notice">
+                    <small>
+                        ⚠️ {locale.startsWith('pt') ? 'As cotações podem sofrer pequenas variações devido ao uso da versão gratuita das APIs.' : 'Rates may have slight variations due to using free tier APIs.'}
+                    </small>
+                </div>
 
 				<div className="loader-container" id="loader" style={{ display: loading ? 'flex' : 'none', opacity: loading ? 1 : 0 }}>
 					<div className="loader" />
